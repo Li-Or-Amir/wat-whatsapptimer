@@ -1,0 +1,260 @@
+import { useState, useEffect } from 'react';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon, Clock, MessageSquare, User } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+
+export default function ScheduleModal({ 
+  open, 
+  onClose, 
+  contact, 
+  message: existingMessage, 
+  onSave, 
+  isLoading,
+  contacts = [],
+  onContactSelect
+}) {
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [messageText, setMessageText] = useState('');
+  const [date, setDate] = useState(null);
+  const [hour, setHour] = useState('12');
+  const [minute, setMinute] = useState('00');
+  const [period, setPeriod] = useState('PM');
+
+  useEffect(() => {
+    if (existingMessage) {
+      setSelectedContact(contact);
+      setMessageText(existingMessage.message || '');
+      const scheduledDate = new Date(existingMessage.scheduled_time);
+      setDate(scheduledDate);
+      let hours = scheduledDate.getHours();
+      const isPM = hours >= 12;
+      hours = hours % 12 || 12;
+      setHour(hours.toString());
+      setMinute(scheduledDate.getMinutes().toString().padStart(2, '0'));
+      setPeriod(isPM ? 'PM' : 'AM');
+    } else if (contact) {
+      setSelectedContact(contact);
+      setMessageText('');
+      setDate(null);
+      setHour('12');
+      setMinute('00');
+      setPeriod('PM');
+    } else {
+      setSelectedContact(null);
+      setMessageText('');
+      setDate(null);
+      setHour('12');
+      setMinute('00');
+      setPeriod('PM');
+    }
+  }, [existingMessage, contact, open]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!date || !selectedContact) return;
+
+    let hours = parseInt(hour);
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours = 0;
+
+    const scheduledTime = new Date(date);
+    scheduledTime.setHours(hours, parseInt(minute), 0, 0);
+
+    onSave({
+      contact_id: selectedContact.id,
+      contact_name: selectedContact.name,
+      contact_phone: selectedContact.phone_number,
+      message: messageText,
+      scheduled_time: scheduledTime.toISOString(),
+      status: 'pending',
+    });
+  };
+
+  const isEditing = !!existingMessage;
+  const initials = selectedContact?.name
+    ?.split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2) || 'U';
+
+  const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
+  const minutes = ['00', '15', '30', '45'];
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle className="text-xl">
+            {isEditing ? 'Edit Scheduled Message' : 'Schedule Message'}
+          </DialogTitle>
+        </DialogHeader>
+        
+        <form onSubmit={handleSubmit} className="space-y-5 py-4">
+          {/* Contact Selection */}
+          {!contact && !existingMessage && contacts.length > 0 && (
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-slate-700">Send To</Label>
+              <Select
+                value={selectedContact?.id || ''}
+                onValueChange={(id) => {
+                  const c = contacts.find(c => c.id === id);
+                  setSelectedContact(c);
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a contact" />
+                </SelectTrigger>
+                <SelectContent>
+                  {contacts.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      <div className="flex items-center gap-2">
+                        <span>{c.name}</span>
+                        <span className="text-slate-400 text-xs">{c.phone_number}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Selected Contact Display */}
+          {selectedContact && (
+            <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+              <Avatar className="h-10 w-10">
+                <AvatarFallback className="bg-gradient-to-br from-emerald-400 to-teal-500 text-white text-sm">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-medium text-slate-800">{selectedContact.name}</p>
+                <p className="text-xs text-slate-500">{selectedContact.phone_number}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Message */}
+          <div className="space-y-2">
+            <Label htmlFor="message" className="text-sm font-medium text-slate-700">
+              Message
+            </Label>
+            <div className="relative">
+              <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <Textarea
+                id="message"
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                className="pl-10 min-h-[100px] resize-none"
+                placeholder="Type your message here..."
+                required
+              />
+            </div>
+            <p className="text-xs text-slate-500 text-right">{messageText.length} characters</p>
+          </div>
+
+          {/* Date & Time */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-slate-700">Schedule For</Label>
+            <div className="flex gap-3">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "flex-1 justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP") : "Pick a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            
+            <div className="flex gap-2 items-center">
+              <Clock className="h-4 w-4 text-slate-400" />
+              <Select value={hour} onValueChange={setHour}>
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {hours.map((h) => (
+                    <SelectItem key={h} value={h}>{h}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <span className="text-slate-400">:</span>
+              <Select value={minute} onValueChange={setMinute}>
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {minutes.map((m) => (
+                    <SelectItem key={m} value={m}>{m}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={period} onValueChange={setPeriod}>
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AM">AM</SelectItem>
+                  <SelectItem value="PM">PM</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button type="button" variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={isLoading || !selectedContact || !date || !messageText.trim()}
+              className="bg-emerald-600 hover:bg-emerald-700"
+            >
+              {isLoading ? 'Saving...' : isEditing ? 'Update Message' : 'Schedule Message'}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
