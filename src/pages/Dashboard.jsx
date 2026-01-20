@@ -9,7 +9,8 @@ import {
   Users, 
   Plus,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  ExternalLink
 } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -85,13 +86,28 @@ export default function Dashboard() {
             </h1>
             <p className="text-slate-500 mt-1">Schedule your WhatsApp messages with ease</p>
           </div>
-          <Button 
-            onClick={() => setScheduleModalOpen(true)}
-            className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-200 h-12 px-6"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            Schedule Message
-          </Button>
+          <div className="flex gap-3">
+            <a 
+              href="https://web.whatsapp.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Button 
+                variant="outline"
+                className="h-12 px-5 border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+              >
+                <ExternalLink className="h-5 w-5 mr-2" />
+                Go to WhatsApp
+              </Button>
+            </a>
+            <Button 
+              onClick={() => setScheduleModalOpen(true)}
+              className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-200 h-12 px-6"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Schedule Message
+            </Button>
+          </div>
         </motion.div>
 
         {/* Stats */}

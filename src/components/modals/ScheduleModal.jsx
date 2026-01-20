@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Clock, MessageSquare, User } from 'lucide-react';
+import { formatInTimeZone } from 'date-fns-tz';
+import { Calendar as CalendarIcon, Clock, MessageSquare, Globe } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -27,6 +28,35 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
+const COMMON_TIMEZONES = [
+  { value: 'America/New_York', label: 'Eastern Time (ET)' },
+  { value: 'America/Chicago', label: 'Central Time (CT)' },
+  { value: 'America/Denver', label: 'Mountain Time (MT)' },
+  { value: 'America/Los_Angeles', label: 'Pacific Time (PT)' },
+  { value: 'America/Anchorage', label: 'Alaska Time (AKT)' },
+  { value: 'Pacific/Honolulu', label: 'Hawaii Time (HT)' },
+  { value: 'Europe/London', label: 'London (GMT/BST)' },
+  { value: 'Europe/Paris', label: 'Central European (CET)' },
+  { value: 'Europe/Berlin', label: 'Berlin (CET)' },
+  { value: 'Europe/Moscow', label: 'Moscow (MSK)' },
+  { value: 'Asia/Dubai', label: 'Dubai (GST)' },
+  { value: 'Asia/Kolkata', label: 'India (IST)' },
+  { value: 'Asia/Singapore', label: 'Singapore (SGT)' },
+  { value: 'Asia/Tokyo', label: 'Tokyo (JST)' },
+  { value: 'Asia/Shanghai', label: 'China (CST)' },
+  { value: 'Australia/Sydney', label: 'Sydney (AEST)' },
+  { value: 'Australia/Perth', label: 'Perth (AWST)' },
+  { value: 'Pacific/Auckland', label: 'Auckland (NZST)' },
+];
+
+function getUserTimezone() {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch {
+    return 'America/New_York';
+  }
+}
+
 export default function ScheduleModal({ 
   open, 
   onClose, 
@@ -43,6 +73,7 @@ export default function ScheduleModal({
   const [hour, setHour] = useState('12');
   const [minute, setMinute] = useState('00');
   const [period, setPeriod] = useState('PM');
+  const [timezone, setTimezone] = useState(getUserTimezone());
 
   useEffect(() => {
     if (existingMessage) {
@@ -56,6 +87,7 @@ export default function ScheduleModal({
       setHour(hours.toString());
       setMinute(scheduledDate.getMinutes().toString().padStart(2, '0'));
       setPeriod(isPM ? 'PM' : 'AM');
+      setTimezone(existingMessage.timezone || getUserTimezone());
     } else if (contact) {
       setSelectedContact(contact);
       setMessageText('');
@@ -63,6 +95,7 @@ export default function ScheduleModal({
       setHour('12');
       setMinute('00');
       setPeriod('PM');
+      setTimezone(getUserTimezone());
     } else {
       setSelectedContact(null);
       setMessageText('');
@@ -70,6 +103,7 @@ export default function ScheduleModal({
       setHour('12');
       setMinute('00');
       setPeriod('PM');
+      setTimezone(getUserTimezone());
     }
   }, [existingMessage, contact, open]);
 
@@ -90,6 +124,7 @@ export default function ScheduleModal({
       contact_phone: selectedContact.phone_number,
       message: messageText,
       scheduled_time: scheduledTime.toISOString(),
+      timezone: timezone,
       status: 'pending',
     });
   };
@@ -102,12 +137,17 @@ export default function ScheduleModal({
     .toUpperCase()
     .slice(0, 2) || 'U';
 
-  const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
-  const minutes = ['00', '15', '30', '45'];
+  const hoursOptions = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
+  const minutesOptions = ['00', '15', '30', '45'];
+
+  // Find timezone in list or add it
+  const allTimezones = COMMON_TIMEZONES.some(tz => tz.value === timezone)
+    ? COMMON_TIMEZONES
+    : [{ value: timezone, label: timezone }, ...COMMON_TIMEZONES];
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl">
             {isEditing ? 'Edit Scheduled Message' : 'Schedule Message'}
@@ -213,7 +253,7 @@ export default function ScheduleModal({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {hours.map((h) => (
+                  {hoursOptions.map((h) => (
                     <SelectItem key={h} value={h}>{h}</SelectItem>
                   ))}
                 </SelectContent>
@@ -224,7 +264,7 @@ export default function ScheduleModal({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {minutes.map((m) => (
+                  {minutesOptions.map((m) => (
                     <SelectItem key={m} value={m}>{m}</SelectItem>
                   ))}
                 </SelectContent>
@@ -236,6 +276,26 @@ export default function ScheduleModal({
                 <SelectContent>
                   <SelectItem value="AM">AM</SelectItem>
                   <SelectItem value="PM">PM</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Timezone */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-slate-700">Timezone</Label>
+            <div className="flex gap-2 items-center">
+              <Globe className="h-4 w-4 text-slate-400" />
+              <Select value={timezone} onValueChange={setTimezone}>
+                <SelectTrigger className="flex-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {allTimezones.map((tz) => (
+                    <SelectItem key={tz.value} value={tz.value}>
+                      {tz.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
