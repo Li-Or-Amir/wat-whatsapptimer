@@ -82,9 +82,9 @@ export default function Dashboard() {
         >
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-slate-800 tracking-tight">
-              Message Scheduler
+              WAT?! Dashboard
             </h1>
-            <p className="text-slate-500 mt-1">Schedule your WhatsApp messages with ease</p>
+            <p className="text-slate-500 mt-1">Set-and-forget messaging — schedule once, relax forever ✨</p>
           </div>
           <div className="flex gap-3">
             <a 

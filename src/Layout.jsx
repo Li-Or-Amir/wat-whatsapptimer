@@ -5,9 +5,9 @@ import {
   Users, 
   MessageCircle, 
   Menu,
-  X,
-  Send
+  X
 } from 'lucide-react';
+import AppLogo from './components/ui/AppLogo';
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
 import { cn } from "@/lib/utils";
@@ -31,12 +31,10 @@ export default function Layout({ children, currentPageName }) {
       <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 flex-col z-50">
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-              <Send className="h-5 w-5 text-white" />
-            </div>
+            <AppLogo size="md" />
             <div>
-              <h1 className="font-bold text-slate-800 text-lg">WA Scheduler</h1>
-              <p className="text-xs text-slate-500">Message Planner</p>
+              <h1 className="font-bold text-slate-800 text-lg">WAT?!</h1>
+              <p className="text-xs text-slate-500">WhatsAppTimer</p>
             </div>
           </div>
         </div>
@@ -63,9 +61,9 @@ export default function Layout({ children, currentPageName }) {
         </nav>
         
         <div className="p-4 border-t border-slate-100">
-          <div className="p-4 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl">
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Schedule WhatsApp messages to be sent at the perfect time.
+          <div className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl">
+            <p className="text-xs text-slate-600 leading-relaxed font-medium">
+              ⏰ Schedule now, edit or delete trace-free.
             </p>
           </div>
         </div>
@@ -74,10 +72,8 @@ export default function Layout({ children, currentPageName }) {
       {/* Mobile Header */}
       <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-50">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
-            <Send className="h-4 w-4 text-white" />
-          </div>
-          <h1 className="font-bold text-slate-800">WA Scheduler</h1>
+          <AppLogo size="sm" />
+          <h1 className="font-bold text-slate-800">WAT?!</h1>
         </div>
         <Button 
           variant="ghost" 

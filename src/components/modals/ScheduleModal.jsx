@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Clock, MessageSquare, Globe } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, MessageSquare, Globe, Paperclip } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import AttachmentPicker from './AttachmentPicker';
 
 const COMMON_TIMEZONES = [
   { value: 'America/New_York', label: 'Eastern Time (ET)' },
@@ -73,6 +74,7 @@ export default function ScheduleModal({
   const [minute, setMinute] = useState('00');
   const [period, setPeriod] = useState('PM');
   const [timezone, setTimezone] = useState(getUserTimezone());
+  const [attachments, setAttachments] = useState([]);
 
   useEffect(() => {
     if (existingMessage) {
@@ -87,6 +89,7 @@ export default function ScheduleModal({
       setMinute(scheduledDate.getMinutes().toString().padStart(2, '0'));
       setPeriod(isPM ? 'PM' : 'AM');
       setTimezone(existingMessage.timezone || getUserTimezone());
+      setAttachments(existingMessage.attachments || []);
     } else if (contact) {
       setSelectedContact(contact);
       setMessageText('');
@@ -95,6 +98,7 @@ export default function ScheduleModal({
       setMinute('00');
       setPeriod('PM');
       setTimezone(getUserTimezone());
+      setAttachments([]);
     } else {
       setSelectedContact(null);
       setMessageText('');
@@ -103,8 +107,21 @@ export default function ScheduleModal({
       setMinute('00');
       setPeriod('PM');
       setTimezone(getUserTimezone());
+      setAttachments([]);
     }
   }, [existingMessage, contact, open]);
+
+  const handleEmojiSelect = (emoji) => {
+    setMessageText(prev => prev + emoji);
+  };
+
+  const handleAttachment = (attachment) => {
+    setAttachments(prev => [...prev, attachment]);
+  };
+
+  const handleRemoveAttachment = (index) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -124,6 +141,7 @@ export default function ScheduleModal({
       message: messageText,
       scheduled_time: scheduledTime.toISOString(),
       timezone: timezone,
+      attachments: attachments,
       status: 'pending',
     });
   };
@@ -213,7 +231,15 @@ export default function ScheduleModal({
                 required
               />
             </div>
-            <p className="text-xs text-slate-500 text-right">{messageText.length} characters</p>
+            <div className="flex items-center justify-between">
+              <AttachmentPicker
+                onEmojiSelect={handleEmojiSelect}
+                onAttachment={handleAttachment}
+                attachments={attachments}
+                onRemoveAttachment={handleRemoveAttachment}
+              />
+              <p className="text-xs text-slate-500">{messageText.length} characters</p>
+            </div>
           </div>
 
           {/* Date & Time */}
