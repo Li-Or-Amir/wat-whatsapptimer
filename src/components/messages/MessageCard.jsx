@@ -1,5 +1,5 @@
 import { format, isPast, differenceInMinutes } from 'date-fns';
-import { Clock, Edit, Trash2, CheckCircle, XCircle, AlertCircle, User } from 'lucide-react';
+import { Clock, Edit, Trash2, CheckCircle, XCircle, AlertCircle, User, ExternalLink } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -91,28 +91,46 @@ export default function MessageCard({ message, onEdit, onDelete }) {
                 )}
               </div>
               
-              {canEdit && (
-                <div className="flex items-center gap-1">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 px-3 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50"
-                    onClick={() => onEdit(message)}
+              <div className="flex items-center gap-1">
+                {message.status === 'sent' && message.contact_phone && (
+                  <a
+                    href={`https://wa.me/${message.contact_phone.replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    <Edit className="h-3.5 w-3.5 mr-1" />
-                    Edit
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 px-3 text-slate-600 hover:text-red-600 hover:bg-red-50"
-                    onClick={() => onDelete(message)}
-                  >
-                    <Trash2 className="h-3.5 w-3.5 mr-1" />
-                    Delete
-                  </Button>
-                </div>
-              )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 px-3 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5 mr-1" />
+                      See on WhatsApp
+                    </Button>
+                  </a>
+                )}
+                {canEdit && (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 px-3 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50"
+                      onClick={() => onEdit(message)}
+                    >
+                      <Edit className="h-3.5 w-3.5 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 px-3 text-slate-600 hover:text-red-600 hover:bg-red-50"
+                      onClick={() => onDelete(message)}
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1" />
+                      Delete
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

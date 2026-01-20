@@ -2,9 +2,9 @@ import { cn } from "@/lib/utils";
 
 export default function AppLogo({ size = "md", className }) {
   const sizes = {
-    sm: { container: "h-9 w-9", bubble: "h-6 w-6", clock: "h-2.5 w-2.5" },
-    md: { container: "h-10 w-10", bubble: "h-7 w-7", clock: "h-3 w-3" },
-    lg: { container: "h-12 w-12", bubble: "h-8 w-8", clock: "h-3.5 w-3.5" },
+    sm: { container: "h-9 w-9", clock: "h-3 w-3" },
+    md: { container: "h-10 w-10", clock: "h-3.5 w-3.5" },
+    lg: { container: "h-12 w-12", clock: "h-4 w-4" },
   };
   
   const s = sizes[size] || sizes.md;
@@ -15,24 +15,25 @@ export default function AppLogo({ size = "md", className }) {
       s.container,
       className
     )}>
-      {/* Chat bubble */}
+      {/* Round chat bubble (like Messages icon) */}
       <svg 
         viewBox="0 0 24 24" 
         fill="white"
-        className={s.bubble}
+        className="h-[65%] w-[65%]"
       >
-        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        <circle cx="12" cy="11" r="8" />
+        <path d="M12 19c-1.5 0-3 0-4.5 1.5L8 19c1.3 0 2.7 0 4 0z" />
       </svg>
       {/* Tiny clock inside */}
       <div className={cn(
-        "absolute bg-emerald-500 rounded-full flex items-center justify-center",
+        "absolute flex items-center justify-center",
         s.clock
       )}
-      style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+      style={{ top: '42%', left: '50%', transform: 'translate(-50%, -50%)' }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" className="w-full h-full p-0.5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" className="w-full h-full">
           <circle cx="12" cy="12" r="9" />
-          <path d="M12 6v6l4 2" strokeLinecap="round" />
+          <path d="M12 7v5l3 2" strokeLinecap="round" />
         </svg>
       </div>
     </div>

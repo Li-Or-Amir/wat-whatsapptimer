@@ -47,27 +47,32 @@ export default function Dashboard() {
   const todayMessages = pendingMessages.filter(m => isToday(new Date(m.scheduled_time)));
   const upcomingMessages = pendingMessages.slice(0, 5);
 
+  const sentMessages = messages.filter(m => m.status === 'sent');
+
   const stats = [
     { 
-      label: 'Total Contacts', 
-      value: contacts.length, 
-      icon: Users, 
+      label: 'Sent Messages', 
+      value: sentMessages.length, 
+      icon: MessageCircle, 
       color: 'from-blue-500 to-indigo-600',
-      bgColor: 'bg-blue-50'
+      bgColor: 'bg-blue-50',
+      tab: 'sent'
     },
     { 
       label: 'Scheduled Today', 
       value: todayMessages.length, 
       icon: Calendar, 
       color: 'from-emerald-500 to-teal-600',
-      bgColor: 'bg-emerald-50'
+      bgColor: 'bg-emerald-50',
+      tab: 'pending'
     },
     { 
       label: 'Pending Messages', 
       value: pendingMessages.length, 
       icon: Clock, 
       color: 'from-amber-500 to-orange-600',
-      bgColor: 'bg-amber-50'
+      bgColor: 'bg-amber-50',
+      tab: 'pending'
     },
   ];
 
@@ -84,7 +89,7 @@ export default function Dashboard() {
             <h1 className="text-3xl md:text-4xl font-bold text-slate-800 tracking-tight">
               WAT?! Dashboard
             </h1>
-            <p className="text-slate-500 mt-1">Set-and-forget messaging — schedule once, relax forever ✨</p>
+            <p className="text-slate-500 mt-1">Set-and-forget your WhatsApp messages here.</p>
           </div>
           <div className="flex gap-3">
             <a 
@@ -119,19 +124,21 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="p-6 border-0 bg-white/70 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-slate-500 font-medium">{stat.label}</p>
-                    <p className="text-3xl font-bold text-slate-800 mt-1">{stat.value}</p>
+              <Link to={`${createPageUrl('Messages')}?tab=${stat.tab}`}>
+                <Card className="p-6 border-0 bg-white/70 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-500 font-medium">{stat.label}</p>
+                      <p className="text-3xl font-bold text-slate-800 mt-1">{stat.value}</p>
+                    </div>
+                    <div className={`h-14 w-14 rounded-2xl ${stat.bgColor} flex items-center justify-center`}>
+                      <stat.icon className={`h-7 w-7 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`} 
+                        style={{ color: stat.color.includes('blue') ? '#3b82f6' : stat.color.includes('emerald') ? '#10b981' : '#f59e0b' }}
+                      />
+                    </div>
                   </div>
-                  <div className={`h-14 w-14 rounded-2xl ${stat.bgColor} flex items-center justify-center`}>
-                    <stat.icon className={`h-7 w-7 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`} 
-                      style={{ color: stat.color.includes('blue') ? '#3b82f6' : stat.color.includes('emerald') ? '#10b981' : '#f59e0b' }}
-                    />
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </Link>
             </motion.div>
           ))}
         </div>

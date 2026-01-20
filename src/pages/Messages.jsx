@@ -20,8 +20,11 @@ import ScheduleModal from '../components/modals/ScheduleModal';
 import DeleteConfirmModal from '../components/modals/DeleteConfirmModal';
 
 export default function Messages() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialTab = urlParams.get('tab') || 'pending';
+  
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('pending');
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
