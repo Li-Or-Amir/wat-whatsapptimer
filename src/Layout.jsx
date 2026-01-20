@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from 'react';
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from 'framer-motion';
+import OnboardingFlow from './components/onboarding/OnboardingFlow';
 
 const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
@@ -24,6 +25,7 @@ export default function Layout({ children, currentPageName }) {
   const location = useLocation();
 
   return (
+    <OnboardingFlow>
     <div className="min-h-screen bg-slate-50">
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 flex-col z-50">
@@ -125,5 +127,6 @@ export default function Layout({ children, currentPageName }) {
         {children}
       </main>
     </div>
+    </OnboardingFlow>
   );
 }
