@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { formatInTimeZone } from 'date-fns-tz';
 import { Calendar as CalendarIcon, Clock, MessageSquare, Globe } from 'lucide-react';
 import {
   Dialog,
