@@ -15,14 +15,13 @@ export default function AppLogo({ size = "md", className }) {
       s.container,
       className
     )}>
-      {/* Enlarged round chat bubble (like Messages icon) */}
+      {/* WhatsApp-style text bubble */}
       <svg 
         viewBox="0 0 24 24" 
         fill="white"
         className="h-[80%] w-[80%]"
       >
-        <circle cx="12" cy="10" r="9" />
-        <path d="M7 17l3-3h6" fill="white" />
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h3l3 4 3-4h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
       </svg>
       {/* Tiny clock inside */}
       <div className={cn(
