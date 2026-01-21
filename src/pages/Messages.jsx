@@ -21,7 +21,8 @@ import DeleteConfirmModal from '../components/modals/DeleteConfirmModal';
 
 export default function Messages() {
   const urlParams = new URLSearchParams(window.location.search);
-  const initialTab = urlParams.get('tab') || 'pending';
+  const tabParam = urlParams.get('tab');
+  const initialTab = tabParam === 'scheduled' ? 'pending' : (tabParam || 'pending');
   
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -156,7 +157,7 @@ export default function Messages() {
             <TabsList className="bg-white/80 border border-slate-200 h-11 p-1 w-full sm:w-auto">
               <TabsTrigger value="pending" className="px-3 data-[state=active]:bg-amber-500 data-[state=active]:text-white">
                 <Clock className="h-4 w-4 mr-1.5" />
-                Pending
+                Scheduled
               </TabsTrigger>
               <TabsTrigger value="sent" className="px-3 data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
                 <CheckCircle className="h-4 w-4 mr-1.5" />
@@ -164,7 +165,7 @@ export default function Messages() {
               </TabsTrigger>
               <TabsTrigger value="cancelled" className="px-3 data-[state=active]:bg-slate-600 data-[state=active]:text-white">
                 <XCircle className="h-4 w-4 mr-1.5" />
-                Expired
+                Deleted
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -186,7 +187,7 @@ export default function Messages() {
               >
                 <MessageCircle className="h-14 w-14 text-slate-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-slate-700 mb-1">
-                  {searchQuery ? 'No messages found' : `No ${activeTab} messages`}
+                  {searchQuery ? 'No messages found' : `No ${activeTab === 'pending' ? 'scheduled' : activeTab} messages`}
                 </h3>
                 <p className="text-slate-500 mb-4">
                   {searchQuery ? 'Try a different search term' : 'Schedule your first message to get started'}

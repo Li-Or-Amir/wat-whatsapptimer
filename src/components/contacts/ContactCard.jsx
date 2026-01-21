@@ -1,4 +1,4 @@
-import { Star, Phone, MessageCircle, MoreVertical, Trash2, Edit } from 'lucide-react';
+import { Star, Phone, MoreVertical, Trash2, Edit, ExternalLink } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -54,9 +54,31 @@ export default function ContactCard({ contact, onSchedule, onEdit, onDelete, onT
               variant="ghost"
               className="h-9 w-9 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
               onClick={() => onSchedule(contact)}
+              title="New Message"
             >
-              <MessageCircle className="h-4 w-4" />
+              {/* App logo style bubble with clock */}
+              <svg viewBox="0 0 24 24" className="h-5 w-5">
+                <circle cx="12" cy="10" r="8" fill="#10b981" />
+                <path d="M7 16l2.5-2.5h5" fill="#10b981" />
+                <circle cx="12" cy="10" r="3" fill="none" stroke="white" strokeWidth="1.5" />
+                <path d="M12 8.5v1.5l1 0.7" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
             </Button>
+            
+            <a
+              href={`https://wa.me/${contact.phone_number.replace(/[^0-9]/g, '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-9 w-9 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                title="See Chat"
+              >
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </a>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

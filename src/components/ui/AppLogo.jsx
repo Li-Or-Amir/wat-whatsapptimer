@@ -15,21 +15,21 @@ export default function AppLogo({ size = "md", className }) {
       s.container,
       className
     )}>
-      {/* Round chat bubble (like Messages icon) */}
+      {/* Enlarged round chat bubble (like Messages icon) */}
       <svg 
         viewBox="0 0 24 24" 
         fill="white"
-        className="h-[65%] w-[65%]"
+        className="h-[80%] w-[80%]"
       >
-        <circle cx="12" cy="11" r="8" />
-        <path d="M12 19c-1.5 0-3 0-4.5 1.5L8 19c1.3 0 2.7 0 4 0z" />
+        <circle cx="12" cy="10" r="9" />
+        <path d="M7 17l3-3h6" fill="white" />
       </svg>
       {/* Tiny clock inside */}
       <div className={cn(
         "absolute flex items-center justify-center",
         s.clock
       )}
-      style={{ top: '42%', left: '50%', transform: 'translate(-50%, -50%)' }}
+      style={{ top: '38%', left: '50%', transform: 'translate(-50%, -50%)' }}
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" className="w-full h-full">
           <circle cx="12" cy="12" r="9" />

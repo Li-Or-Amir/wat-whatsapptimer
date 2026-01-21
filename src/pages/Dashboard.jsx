@@ -64,7 +64,7 @@ export default function Dashboard() {
       icon: Calendar, 
       color: 'from-emerald-500 to-teal-600',
       bgColor: 'bg-emerald-50',
-      tab: 'pending'
+      tab: 'scheduled'
     },
     { 
       label: 'Pending Messages', 
@@ -72,7 +72,7 @@ export default function Dashboard() {
       icon: Clock, 
       color: 'from-amber-500 to-orange-600',
       bgColor: 'bg-amber-50',
-      tab: 'pending'
+      tab: 'scheduled'
     },
   ];
 
@@ -110,7 +110,7 @@ export default function Dashboard() {
               className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-200 h-12 px-6"
             >
               <Plus className="h-5 w-5 mr-2" />
-              Schedule Message
+              New Message
             </Button>
           </div>
         </motion.div>
@@ -288,6 +288,36 @@ export default function Dashboard() {
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-slate-800">{contact.name}</p>
                             <p className="text-xs text-slate-500">{contact.phone_number}</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                              onClick={() => setScheduleModalOpen(true)}
+                              title="New Message"
+                            >
+                              <svg viewBox="0 0 24 24" className="h-4 w-4">
+                                <circle cx="12" cy="10" r="8" fill="#10b981" />
+                                <path d="M7 16l2.5-2.5h5" fill="#10b981" />
+                                <circle cx="12" cy="10" r="3" fill="none" stroke="white" strokeWidth="1.5" />
+                                <path d="M12 8.5v1.5l1 0.7" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                              </svg>
+                            </Button>
+                            <a
+                              href={`https://wa.me/${contact.phone_number.replace(/[^0-9]/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                                title="See Chat"
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                              </Button>
+                            </a>
                           </div>
                         </motion.div>
                       );
