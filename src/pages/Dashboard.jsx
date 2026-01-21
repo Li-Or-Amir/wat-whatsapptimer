@@ -295,13 +295,13 @@ export default function Dashboard() {
                               variant="ghost"
                               className="h-8 w-8 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
                               onClick={() => setScheduleModalOpen(true)}
-                              title="New Message"
+                              title="Schedule Message"
                             >
-                              <svg viewBox="0 0 24 24" className="h-5 w-5">
-                                <circle cx="12" cy="10" r="8" fill="#10b981" />
-                                <path d="M7 16l2.5-2.5h5" fill="#10b981" />
-                                <circle cx="12" cy="10" r="3" fill="none" stroke="white" strokeWidth="1.5" />
-                                <path d="M12 8.5v1.5l1 0.7" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="9" />
+                                <path d="M12 7v5l3 3" />
+                                <circle cx="19" cy="5" r="4" fill="#10b981" stroke="#10b981" />
+                                <path d="M19 3.5v3M17.5 5h3" stroke="white" strokeWidth="1.5" />
                               </svg>
                             </Button>
                             <a
