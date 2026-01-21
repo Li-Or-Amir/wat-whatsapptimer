@@ -297,7 +297,7 @@ export default function Dashboard() {
                               onClick={() => setScheduleModalOpen(true)}
                               title="New Message"
                             >
-                              <svg viewBox="0 0 24 24" className="h-4 w-4">
+                              <svg viewBox="0 0 24 24" className="h-5 w-5">
                                 <circle cx="12" cy="10" r="8" fill="#10b981" />
                                 <path d="M7 16l2.5-2.5h5" fill="#10b981" />
                                 <circle cx="12" cy="10" r="3" fill="none" stroke="white" strokeWidth="1.5" />
