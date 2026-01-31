@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from 'framer-motion';
 import OnboardingFlow from './components/onboarding/OnboardingFlow';
+import InstallPrompt from './components/ui/InstallPrompt';
 
 const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
@@ -119,10 +120,13 @@ export default function Layout({ children, currentPageName }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="md:ml-64 pt-16 md:pt-0 min-h-screen">
-        {children}
-      </main>
-    </div>
-    </OnboardingFlow>
+          <main className="md:ml-64 pt-16 md:pt-0 min-h-screen">
+            {children}
+          </main>
+
+          {/* PWA Install Prompt */}
+          <InstallPrompt />
+        </div>
+        </OnboardingFlow>
   );
 }

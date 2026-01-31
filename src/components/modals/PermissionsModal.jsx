@@ -17,8 +17,8 @@ const permissions = [
   {
     id: 'contacts',
     icon: Users,
-    title: 'Access Contacts',
-    description: 'Allow the app to store and manage your WhatsApp contact information for scheduling messages.',
+    title: 'Sync & Manage Contacts',
+    description: 'Add your WhatsApp contacts to schedule messages. You can import contacts manually or from your phone\'s contact list.',
     required: true,
   },
   {
@@ -108,7 +108,7 @@ export default function PermissionsModal({ open, onClose, onAccept }) {
 
         <div className="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg">
           <p className="font-medium text-slate-700 mb-1">Your data is secure</p>
-          <p>We only store the information necessary to schedule your messages. Your data is encrypted and never shared with third parties.</p>
+          <p>We only store the information necessary to schedule your messages. Your data is encrypted and never shared with third parties. For the best experience, install WAT?! on your phone.</p>
         </div>
         
         <DialogFooter className="gap-2 sm:gap-0 mt-4">
