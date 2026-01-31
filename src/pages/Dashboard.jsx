@@ -258,13 +258,17 @@ export default function Dashboard() {
                     <motion.div 
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="text-center py-12"
+                      className="text-center py-12 px-4"
                     >
-                      <Users className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-                      <p className="text-slate-500">No contacts yet</p>
+                      <div className="h-16 w-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
+                        <Users className="h-8 w-8 text-blue-400" />
+                      </div>
+                      <h3 className="font-semibold text-slate-800 mb-1">Add your first contact</h3>
+                      <p className="text-sm text-slate-500 mb-4">Save your WhatsApp contacts to start scheduling messages</p>
                       <Link to={createPageUrl('Contacts')}>
-                        <Button variant="link" className="text-blue-600 mt-2">
-                          Add your first contact
+                        <Button className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Contact
                         </Button>
                       </Link>
                     </motion.div>
