@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import TermsModal from '../modals/TermsModal';
 import PermissionsModal from '../modals/PermissionsModal';
+import WhatsAppConnectScreen from './WhatsAppConnectScreen';
 
 export default function OnboardingFlow({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showTerms, setShowTerms] = useState(false);
   const [showPermissions, setShowPermissions] = useState(false);
+  const [showWhatsAppConnect, setShowWhatsAppConnect] = useState(false);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
 
   useEffect(() => {
@@ -20,12 +22,14 @@ export default function OnboardingFlow({ children }) {
       setUser(currentUser);
       
       // Check if user has completed onboarding
-      if (currentUser.terms_accepted && currentUser.permissions_granted) {
+      if (currentUser.terms_accepted && currentUser.permissions_granted && currentUser.whatsapp_connected) {
         setOnboardingComplete(true);
       } else if (!currentUser.terms_accepted) {
         setShowTerms(true);
       } else if (!currentUser.permissions_granted) {
         setShowPermissions(true);
+      } else if (!currentUser.whatsapp_connected) {
+        setShowWhatsAppConnect(true);
       }
     } catch (error) {
       console.error('Error loading user:', error);
@@ -54,9 +58,22 @@ export default function OnboardingFlow({ children }) {
         permissions_granted_at: new Date().toISOString()
       });
       setShowPermissions(false);
-      setOnboardingComplete(true);
+      setShowWhatsAppConnect(true);
     } catch (error) {
       console.error('Error updating permissions:', error);
+    }
+  };
+
+  const handleWhatsAppConnect = async () => {
+    try {
+      await base44.auth.updateMe({ 
+        whatsapp_connected: true,
+        whatsapp_connected_at: new Date().toISOString()
+      });
+      setShowWhatsAppConnect(false);
+      setOnboardingComplete(true);
+    } catch (error) {
+      console.error('Error connecting WhatsApp:', error);
     }
   };
 
@@ -71,12 +88,16 @@ export default function OnboardingFlow({ children }) {
     );
   }
 
+  if (showWhatsAppConnect) {
+    return <WhatsAppConnectScreen onConnect={handleWhatsAppConnect} />;
+  }
+
   return (
     <>
       {onboardingComplete ? children : (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-emerald-50/30">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-slate-800 mb-2">Welcome to WA Scheduler</h1>
+            <h1 className="text-2xl font-bold text-slate-800 mb-2">Welcome to WAT?!</h1>
             <p className="text-slate-500">Please complete the setup to continue</p>
           </div>
         </div>
