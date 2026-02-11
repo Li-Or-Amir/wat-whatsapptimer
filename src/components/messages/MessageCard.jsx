@@ -13,6 +13,11 @@ const statusConfig = {
     color: 'bg-amber-100 text-amber-700 border-amber-200',
     label: 'Scheduled'
   },
+  pending_user_action: { 
+    icon: AlertCircle, 
+    color: 'bg-orange-100 text-orange-700 border-orange-200',
+    label: 'Ready to Send'
+  },
   sent: { 
     icon: CheckCircle, 
     color: 'bg-emerald-100 text-emerald-700 border-emerald-200',
@@ -92,7 +97,7 @@ export default function MessageCard({ message, onEdit, onDelete }) {
               </div>
               
               <div className="flex items-center gap-1">
-                {message.status === 'pending' && isPastDue && message.contact_phone && (
+                {(message.status === 'pending_user_action' || (message.status === 'pending' && isPastDue)) && message.contact_phone && (
                   <a
                     href={`https://wa.me/${message.contact_phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message.message)}`}
                     target="_blank"
