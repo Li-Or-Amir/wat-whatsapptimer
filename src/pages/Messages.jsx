@@ -87,15 +87,15 @@ export default function Messages() {
         (m.contact_name || '').toLowerCase().includes(searchQuery.toLowerCase());
       
       const scheduledDate = new Date(m.scheduled_time);
-      const isPending = m.status === 'pending' && !isPast(scheduledDate);
+      const isPending = (m.status === 'pending' || m.status === 'pending_user_action') && !isPast(scheduledDate);
       
-      if (activeTab === 'pending') return matchesSearch && isPending;
+      if (activeTab === 'pending') return matchesSearch && (isPending || m.status === 'pending_user_action');
       if (activeTab === 'sent') return matchesSearch && m.status === 'sent';
       if (activeTab === 'cancelled') return matchesSearch && (m.status === 'cancelled' || (m.status === 'pending' && isPast(scheduledDate)));
       return matchesSearch;
     });
 
-  const pendingCount = messages.filter(m => m.status === 'pending' && !isPast(new Date(m.scheduled_time))).length;
+  const pendingCount = messages.filter(m => (m.status === 'pending' || m.status === 'pending_user_action') && !isPast(new Date(m.scheduled_time))).length;
   const sentCount = messages.filter(m => m.status === 'sent').length;
 
   const handleEditMessage = (message) => {
