@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from 'framer-motion';
 import OnboardingFlow from './components/onboarding/OnboardingFlow';
 import InstallPrompt from './components/ui/InstallPrompt';
+import MessageNotifications from './components/notifications/MessageNotifications';
 
 const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
@@ -126,6 +127,9 @@ export default function Layout({ children, currentPageName }) {
 
           {/* PWA Install Prompt */}
           <InstallPrompt />
+          
+          {/* Message Notifications */}
+          <MessageNotifications />
         </div>
         </OnboardingFlow>
   );
