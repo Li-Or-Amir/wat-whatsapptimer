@@ -39,7 +39,7 @@ export default function MessageCard({ message, onEdit, onDelete }) {
   const scheduledDate = new Date(message.scheduled_time);
   const isPastDue = isPast(scheduledDate);
   const minutesUntil = differenceInMinutes(scheduledDate, new Date());
-  const canEdit = message.status === 'pending' && !isPastDue;
+  const canEdit = message.status === 'pending' || message.status === 'pending_user_action';
   
   const status = statusConfig[message.status] || statusConfig.pending;
   const StatusIcon = status.icon;
