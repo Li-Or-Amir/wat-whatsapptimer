@@ -71,7 +71,7 @@ export default function Dashboard() {
   });
 
   const pendingMessages = messages.filter(m => m.status === 'pending' && !isPast(new Date(m.scheduled_time)));
-  const todayMessages = pendingMessages.filter(m => isToday(new Date(m.scheduled_time)));
+  const todayMessages = messages.filter(m => isToday(new Date(m.scheduled_time)));
   const readyMessages = messages.filter(m => m.status === 'pending' && isPast(new Date(m.scheduled_time)));
   const upcomingMessages = pendingMessages.slice(0, 5);
 
