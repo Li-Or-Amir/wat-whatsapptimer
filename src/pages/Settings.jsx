@@ -200,7 +200,7 @@ export default function Settings() {
                     <h3 className="font-semibold text-slate-800 mb-1">Manual (Recommended)</h3>
                     <p className="text-sm text-slate-600">
                       You'll receive a notification when it's time to send. Click to open WhatsApp Web and send manually. 
-                      This ensures messages appear as if sent directly by you.
+                      This ensures messages appear as if sent directly by you. Make sure to enable the "ready to send" notification below.
                     </p>
                   </div>
                   {(user?.send_mode === 'manual' || !user?.send_mode) && (
