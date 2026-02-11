@@ -72,7 +72,6 @@ export default function ScheduleModal({
   const [date, setDate] = useState(null);
   const [hour, setHour] = useState('12');
   const [minute, setMinute] = useState('00');
-  const [period, setPeriod] = useState('PM');
   const [timezone, setTimezone] = useState(getUserTimezone());
   const [attachments, setAttachments] = useState([]);
 
@@ -82,12 +81,8 @@ export default function ScheduleModal({
       setMessageText(existingMessage.message || '');
       const scheduledDate = new Date(existingMessage.scheduled_time);
       setDate(scheduledDate);
-      let hours = scheduledDate.getHours();
-      const isPM = hours >= 12;
-      hours = hours % 12 || 12;
-      setHour(hours.toString());
+      setHour(scheduledDate.getHours().toString());
       setMinute(scheduledDate.getMinutes().toString().padStart(2, '0'));
-      setPeriod(isPM ? 'PM' : 'AM');
       setTimezone(existingMessage.timezone || getUserTimezone());
       setAttachments(existingMessage.attachments || []);
     } else if (contact) {
@@ -127,12 +122,8 @@ export default function ScheduleModal({
     e.preventDefault();
     if (!date || !selectedContact) return;
 
-    let hours = parseInt(hour);
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
-
     const scheduledTime = new Date(date);
-    scheduledTime.setHours(hours, parseInt(minute), 0, 0);
+    scheduledTime.setHours(parseInt(hour), parseInt(minute), 0, 0);
 
     onSave({
       contact_id: selectedContact.id,
@@ -154,7 +145,7 @@ export default function ScheduleModal({
     .toUpperCase()
     .slice(0, 2) || 'U';
 
-  const hoursOptions = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
+  const hoursOptions = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
   const minutesOptions = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
 
   // Find timezone in list or add it
@@ -292,15 +283,6 @@ export default function ScheduleModal({
                   {minutesOptions.map((m) => (
                     <SelectItem key={m} value={m}>{m}</SelectItem>
                   ))}
-                </SelectContent>
-              </Select>
-              <Select value={period} onValueChange={setPeriod}>
-                <SelectTrigger className="w-20">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="AM">AM</SelectItem>
-                  <SelectItem value="PM">PM</SelectItem>
                 </SelectContent>
               </Select>
             </div>
