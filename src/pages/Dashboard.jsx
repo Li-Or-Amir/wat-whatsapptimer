@@ -10,7 +10,9 @@ import {
   Plus,
   ArrowRight,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Edit,
+  Trash2
 } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,10 +22,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import ScheduleModal from '../components/modals/ScheduleModal';
+import DeleteConfirmModal from '../components/modals/DeleteConfirmModal';
 
 export default function Dashboard() {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: contacts = [] } = useQuery({
@@ -42,6 +47,26 @@ export default function Dashboard() {
       queryClient.invalidateQueries({ queryKey: ['messages'] });
       setScheduleModalOpen(false);
       setSelectedContact(null);
+      setSelectedMessage(null);
+    },
+  });
+
+  const updateMessageMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.ScheduledMessage.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messages'] });
+      setScheduleModalOpen(false);
+      setSelectedContact(null);
+      setSelectedMessage(null);
+    },
+  });
+
+  const deleteMessageMutation = useMutation({
+    mutationFn: (id) => base44.entities.ScheduledMessage.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messages'] });
+      setDeleteModalOpen(false);
+      setSelectedMessage(null);
     },
   });
 
@@ -222,6 +247,38 @@ export default function Dashboard() {
                                 {format(scheduledDate, "MMM d 'at' h:mm a")}
                               </p>
                             </div>
+                            <div className="flex items-center gap-1">
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50"
+                                onClick={() => {
+                                  const contact = contacts.find(c => c.id === msg.contact_id);
+                                  setSelectedMessage(msg);
+                                  setSelectedContact(contact || { 
+                                    id: msg.contact_id, 
+                                    name: msg.contact_name, 
+                                    phone_number: msg.contact_phone 
+                                  });
+                                  setScheduleModalOpen(true);
+                                }}
+                                title="Edit"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-slate-600 hover:text-red-600 hover:bg-red-50"
+                                onClick={() => {
+                                  setSelectedMessage(msg);
+                                  setDeleteModalOpen(true);
+                                }}
+                                title="Delete"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         </motion.div>
                       );
@@ -344,11 +401,31 @@ export default function Dashboard() {
         onClose={() => {
           setScheduleModalOpen(false);
           setSelectedContact(null);
+          setSelectedMessage(null);
         }}
         contact={selectedContact}
+        message={selectedMessage}
         contacts={contacts}
-        onSave={createMessageMutation.mutate}
-        isLoading={createMessageMutation.isPending}
+        onSave={(data) => {
+          if (selectedMessage) {
+            updateMessageMutation.mutate({ id: selectedMessage.id, data });
+          } else {
+            createMessageMutation.mutate(data);
+          }
+        }}
+        isLoading={createMessageMutation.isPending || updateMessageMutation.isPending}
+      />
+
+      <DeleteConfirmModal
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setSelectedMessage(null);
+        }}
+        onConfirm={() => deleteMessageMutation.mutate(selectedMessage?.id)}
+        title="Delete Message"
+        description="Are you sure you want to delete this scheduled message? This action cannot be undone."
+        isLoading={deleteMessageMutation.isPending}
       />
     </div>
   );
