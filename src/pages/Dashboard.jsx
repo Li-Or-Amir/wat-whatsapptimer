@@ -72,6 +72,7 @@ export default function Dashboard() {
 
   const pendingMessages = messages.filter(m => m.status === 'pending' && !isPast(new Date(m.scheduled_time)));
   const todayMessages = pendingMessages.filter(m => isToday(new Date(m.scheduled_time)));
+  const readyMessages = messages.filter(m => m.status === 'pending' && isPast(new Date(m.scheduled_time)));
   const upcomingMessages = pendingMessages.slice(0, 5);
 
   const sentMessages = messages.filter(m => m.status === 'sent');
@@ -86,19 +87,19 @@ export default function Dashboard() {
       tab: 'sent'
     },
     { 
+      label: 'Ready to Send', 
+      value: readyMessages.length, 
+      icon: Clock, 
+      color: 'from-amber-500 to-orange-600',
+      bgColor: 'bg-amber-50',
+      tab: 'pending'
+    },
+    { 
       label: 'Scheduled Today', 
       value: todayMessages.length, 
       icon: Calendar, 
       color: 'from-emerald-500 to-teal-600',
       bgColor: 'bg-emerald-50',
-      tab: 'scheduled'
-    },
-    { 
-      label: 'Pending Messages', 
-      value: pendingMessages.length, 
-      icon: Clock, 
-      color: 'from-amber-500 to-orange-600',
-      bgColor: 'bg-amber-50',
       tab: 'scheduled'
     },
   ];
