@@ -95,7 +95,7 @@ export default function Dashboard() {
       tab: 'pending'
     },
     { 
-      label: 'Scheduled Today', 
+      label: 'Scheduled for Today', 
       value: todayMessages.length, 
       icon: Calendar, 
       color: 'from-emerald-500 to-teal-600',
