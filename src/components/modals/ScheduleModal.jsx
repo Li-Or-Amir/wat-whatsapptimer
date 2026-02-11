@@ -155,7 +155,7 @@ export default function ScheduleModal({
     .slice(0, 2) || 'U';
 
   const hoursOptions = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
-  const minutesOptions = ['00', '15', '30', '45'];
+  const minutesOptions = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
 
   // Find timezone in list or add it
   const allTimezones = COMMON_TIMEZONES.some(tz => tz.value === timezone)
