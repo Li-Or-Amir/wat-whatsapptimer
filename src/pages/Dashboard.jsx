@@ -23,6 +23,7 @@ import ScheduleModal from '../components/modals/ScheduleModal';
 
 export default function Dashboard() {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [selectedContact, setSelectedContact] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: contacts = [] } = useQuery({
@@ -40,6 +41,7 @@ export default function Dashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['messages'] });
       setScheduleModalOpen(false);
+      setSelectedContact(null);
     },
   });
 
@@ -298,7 +300,10 @@ export default function Dashboard() {
                               size="icon"
                               variant="ghost"
                               className="h-8 w-8 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
-                              onClick={() => setScheduleModalOpen(true)}
+                              onClick={() => {
+                                setSelectedContact(contact);
+                                setScheduleModalOpen(true);
+                              }}
                               title="Schedule Message"
                             >
                               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -336,7 +341,11 @@ export default function Dashboard() {
 
       <ScheduleModal
         open={scheduleModalOpen}
-        onClose={() => setScheduleModalOpen(false)}
+        onClose={() => {
+          setScheduleModalOpen(false);
+          setSelectedContact(null);
+        }}
+        contact={selectedContact}
         contacts={contacts}
         onSave={createMessageMutation.mutate}
         isLoading={createMessageMutation.isPending}
