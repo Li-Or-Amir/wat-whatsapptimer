@@ -50,6 +50,7 @@
 import Contacts from './pages/Contacts';
 import Dashboard from './pages/Dashboard';
 import Messages from './pages/Messages';
+import Settings from './pages/Settings';
 import __Layout from './Layout.jsx';
 
 
@@ -57,6 +58,7 @@ export const PAGES = {
     "Contacts": Contacts,
     "Dashboard": Dashboard,
     "Messages": Messages,
+    "Settings": Settings,
 }
 
 export const pagesConfig = {

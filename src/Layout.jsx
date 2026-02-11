@@ -3,7 +3,8 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, 
   Users, 
-  MessageCircle, 
+  MessageCircle,
+  Settings as SettingsIcon,
   Menu,
   X
 } from 'lucide-react';
@@ -20,6 +21,7 @@ const navItems = [
   { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
   { name: 'Contacts', icon: Users, page: 'Contacts' },
   { name: 'Messages', icon: MessageCircle, page: 'Messages' },
+  { name: 'Settings', icon: SettingsIcon, page: 'Settings' },
 ];
 
 export default function Layout({ children, currentPageName }) {
