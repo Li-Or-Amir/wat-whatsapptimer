@@ -72,6 +72,16 @@ export default function Messages() {
     },
   });
 
+  const markAsSentMutation = useMutation({
+    mutationFn: (message) => base44.entities.ScheduledMessage.update(message.id, {
+      status: 'sent',
+      sent_at: new Date().toISOString()
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messages'] });
+    },
+  });
+
   const handleSaveMessage = (data) => {
     if (selectedMessage) {
       updateMessageMutation.mutate({ id: selectedMessage.id, data });
@@ -216,6 +226,7 @@ export default function Messages() {
                     setSelectedMessage(m);
                     setDeleteModalOpen(true);
                   }}
+                  onSendNow={markAsSentMutation.mutate}
                 />
               ))
             )}

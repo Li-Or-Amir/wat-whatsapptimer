@@ -35,7 +35,7 @@ const statusConfig = {
   },
 };
 
-export default function MessageCard({ message, onEdit, onDelete }) {
+export default function MessageCard({ message, onEdit, onDelete, onSendNow }) {
   const scheduledDate = new Date(message.scheduled_time);
   const isPastDue = isPast(scheduledDate);
   const minutesUntil = differenceInMinutes(scheduledDate, new Date());
@@ -98,19 +98,17 @@ export default function MessageCard({ message, onEdit, onDelete }) {
               
               <div className="flex items-center gap-1">
                 {(message.status === 'pending_user_action' || (message.status === 'pending' && isPastDue)) && message.contact_phone && (
-                  <a
-                    href={`https://wa.me/${message.contact_phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message.message)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Button
+                    size="sm"
+                    className="h-8 px-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-md"
+                    onClick={() => {
+                      window.open(`https://wa.me/${message.contact_phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message.message)}`, '_blank');
+                      if (onSendNow) onSendNow(message);
+                    }}
                   >
-                    <Button
-                      size="sm"
-                      className="h-8 px-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-md"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5 mr-1" />
-                      Send Now
-                    </Button>
-                  </a>
+                    <ExternalLink className="h-3.5 w-3.5 mr-1" />
+                    Send Now
+                  </Button>
                 )}
                 {message.status === 'sent' && message.contact_phone && (
                   <a
