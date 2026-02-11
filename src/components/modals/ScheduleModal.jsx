@@ -91,7 +91,6 @@ export default function ScheduleModal({
       setDate(null);
       setHour('12');
       setMinute('00');
-      setPeriod('PM');
       setTimezone(getUserTimezone());
       setAttachments([]);
     } else {
@@ -100,7 +99,6 @@ export default function ScheduleModal({
       setDate(null);
       setHour('12');
       setMinute('00');
-      setPeriod('PM');
       setTimezone(getUserTimezone());
       setAttachments([]);
     }
