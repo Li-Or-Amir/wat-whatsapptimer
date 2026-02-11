@@ -88,7 +88,7 @@ export default function ScheduleModal({
     } else if (contact) {
       setSelectedContact(contact);
       setMessageText('');
-      setDate(null);
+      setDate(new Date());
       setHour('12');
       setMinute('00');
       setTimezone(getUserTimezone());
@@ -96,7 +96,7 @@ export default function ScheduleModal({
     } else {
       setSelectedContact(null);
       setMessageText('');
-      setDate(null);
+      setDate(new Date());
       setHour('12');
       setMinute('00');
       setTimezone(getUserTimezone());
