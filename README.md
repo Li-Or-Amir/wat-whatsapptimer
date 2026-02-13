@@ -1,6 +1,11 @@
-**Welcome to your Base44 project** 
+**Welcome to WAT?! WhatsAppTimer** 
+Public link: https://wat.base44.app/
 
 **About**
+WAT?! is meant to schedule WhatsApp messages: set-and-forget, edit/delete trace-free before sending. 
+Manual mode is already functional - when a message is due, the user is notified and can 1-click show and send it on WhatsAppWeb.
+It's now missing a WhatsApp Business API connection to enable autosend.
+
 
 View and Edit  your app on [Base44.com](http://Base44.com) 
 
