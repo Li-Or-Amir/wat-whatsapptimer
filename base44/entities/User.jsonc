@@ -1,0 +1,55 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "send_mode": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "automatic"
+      ],
+      "default": "manual",
+      "description": "Message sending mode preference"
+    },
+    "notifications_ready_to_send": {
+      "type": "boolean",
+      "default": true,
+      "description": "Show notifications when message is ready to send"
+    },
+    "notifications_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show notifications when message is sent"
+    },
+    "permissions_contacts": {
+      "type": "boolean",
+      "default": false,
+      "description": "Contacts permission granted"
+    },
+    "permissions_notifications": {
+      "type": "boolean",
+      "default": false,
+      "description": "Notifications permission granted"
+    },
+    "whatsapp_connected": {
+      "type": "boolean",
+      "default": false,
+      "description": "WhatsApp Web connection status"
+    },
+    "whatsapp_phone": {
+      "type": "string",
+      "description": "Connected WhatsApp phone number"
+    },
+    "accepted_terms": {
+      "type": "boolean",
+      "default": false
+    },
+    "accepted_permissions": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "whatsapp_phone"
+  ]
+}

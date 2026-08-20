@@ -1,0 +1,46 @@
+{
+  "name": "Contact",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Contact's display name"
+    },
+    "phone_number": {
+      "type": "string",
+      "description": "WhatsApp phone number with country code"
+    },
+    "avatar_url": {
+      "type": "string",
+      "description": "Profile picture URL"
+    },
+    "is_favorite": {
+      "type": "boolean",
+      "default": false,
+      "description": "Mark as favorite contact"
+    },
+    "last_messaged": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time a message was sent to this contact"
+    }
+  },
+  "required": [
+    "name",
+    "phone_number"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
